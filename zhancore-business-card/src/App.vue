@@ -9,14 +9,6 @@ import Main from "./views/Main.vue";
 </template>
 
 <style>
-* {
-  margin: 0;
-}
-
-body {
-  background-color: #eae0cc;
-}
-
 Header {
   width: 100%;
   height: 100px;
