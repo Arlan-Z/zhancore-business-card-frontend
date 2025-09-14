@@ -1,11 +1,24 @@
-<script setup lang="ts"></script>
+<script setup>
+import Header from "./components/Header.vue";
+import Main from "./views/Main.vue";
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <Header />
+  <Main />
 </template>
 
-<style scoped></style>
+<style>
+* {
+  margin: 0;
+}
+
+body {
+  background-color: #eae0cc;
+}
+
+Header {
+  width: 100%;
+  height: 100px;
+}
+</style>
