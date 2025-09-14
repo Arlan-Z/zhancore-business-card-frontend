@@ -12,6 +12,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Inter';
+  src: url('./fonts/inter/Inter-semibold.ttf') format('truetype');
+  font-weight: 600; 
+  font-style: normal;
+}
+
 * {
   margin: 0;
   padding: 0; 

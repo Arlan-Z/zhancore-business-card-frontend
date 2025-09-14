@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+defineOptions({
+  inheritAttrs: false,
+});
+</script>
 
 <template>
   <div class="wrapper">
