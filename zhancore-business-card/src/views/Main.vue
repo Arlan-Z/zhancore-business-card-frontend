@@ -1,6 +1,15 @@
 <script setup>
 import TitleBlock from "@/components/partials/TitleBlock.vue";
 import LogoWithText from "@/assets/logo-with-text-colored.svg?component";
+import { getClientReviews } from "@/api/reviews";
+import { onMounted, ref } from "vue";
+
+const clientReviews = ref([]);
+
+onMounted(async () => {
+  const res = await getClientReviews();
+  clientReviews.value = res.data.reviews;
+});
 </script>
 
 <template>
@@ -45,24 +54,9 @@ import LogoWithText from "@/assets/logo-with-text-colored.svg?component";
 
   <TitleBlock>Our Clients</TitleBlock>
   <div class="our-clients container">
-    <div class="block client-review-block">
+    <div class="block client-review-block" v-for="review in clientReviews">
       <img alt="Company Logo" />
-      <div class="client-review">Review</div>
-    </div>
-
-    <div class="block client-review-block">
-      <img alt="Company Logo" />
-      <div class="client-review">Review</div>
-    </div>
-
-    <div class="block client-review-block">
-      <img alt="Company Logo" />
-      <div class="client-review">Review</div>
-    </div>
-
-    <div class="block client-review-block">
-      <img alt="Company Logo" />
-      <div class="client-review">Review</div>
+      <div class="client-review">{{ review.message }}</div>
     </div>
   </div>
 
