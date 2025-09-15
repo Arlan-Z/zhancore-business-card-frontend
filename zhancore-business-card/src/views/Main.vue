@@ -53,12 +53,14 @@ onMounted(async () => {
   </div>
 
   <TitleBlock>Our Clients</TitleBlock>
-  <div class="our-clients container">
+  <div class="our-clients container" v-if="clientReviews.length > 0">
     <div class="block client-review-block" v-for="review in clientReviews">
       <img alt="Company Logo" />
       <div class="client-review">{{ review.message }}</div>
     </div>
   </div>
+
+  <div class="no-reviews-available container">No reviews available right now.</div>
 
   <TitleBlock>Interested?</TitleBlock>
   <div class="interested container">
@@ -251,5 +253,14 @@ onMounted(async () => {
   background-color: #1c8e8e;
   border: none;
   color: #fafafa;
+}
+
+.no-reviews-available {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 32px;
+  color: #8e1c1c;
 }
 </style>
