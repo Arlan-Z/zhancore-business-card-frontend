@@ -27,9 +27,22 @@
   font-weight: normal;
 }
 
-body {
-  background-color: #eae0cc;
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow-y: auto;       
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
+
+body {
+  background-color: #eae0cc; 
+}
+
+body::-webkit-scrollbar {
+  width: 0; height: 0; 
+}
+
 
 .container {
   width: 100%; 
