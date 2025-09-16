@@ -13,6 +13,9 @@ import Main from "./views/Main.vue";
   width: 100%;
   height: 100px;
   margin-bottom: 42px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .main {
