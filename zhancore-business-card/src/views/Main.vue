@@ -1,14 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import TitleBlock from "@/components/partials/TitleBlock.vue";
 import LogoWithText from "@/assets/logo-with-text-colored.svg?component";
-import { getClientReviews } from "@/api/reviews";
 import { onMounted, ref } from "vue";
+import { getClients } from "@/api";
+import type Client from "@/api/models/client";
 
-const clientReviews = ref([]);
+const clients = ref<Client[]>([]);
 
 onMounted(async () => {
-  const res = await getClientReviews();
-  clientReviews.value = res.data.reviews;
+  const res = await getClients();
+  clients.value = res;
 });
 </script>
 
@@ -53,14 +54,14 @@ onMounted(async () => {
   </div>
 
   <TitleBlock>Our Clients</TitleBlock>
-  <div class="our-clients container" v-if="clientReviews.length > 0">
-    <div class="block client-review-block" v-for="review in clientReviews">
-      <img alt="Company Logo" />
-      <div class="client-review">{{ review.message }}</div>
+  <div class="our-clients container" v-if="clients.length > 0">
+    <div class="block client-review-block" v-for="client in clients">
+      <img alt="Company Logo" :src="client.imageUrl" />
+      <div class="client-review">{{ client.review }}</div>
     </div>
   </div>
 
-  <div class="no-reviews-available container">No reviews available right now.</div>
+  <div class="no-reviews-available container" v-else>No reviews available right now.</div>
 
   <TitleBlock>Interested?</TitleBlock>
   <div class="interested container">
