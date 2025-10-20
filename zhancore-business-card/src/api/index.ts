@@ -4,7 +4,7 @@ import type Client from "./models/client";
 import type Project from "./models/project";
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_BASE_URL,
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
     timeout: 5000
 });
 

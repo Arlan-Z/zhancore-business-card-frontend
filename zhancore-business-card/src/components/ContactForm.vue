@@ -7,44 +7,57 @@
         <p class="subtitle">Let's discuss your project and bring your ideas to life</p>
       </div>
 
-      <form @submit.prevent="handleSubmit" class="contact-form">
-        <div class="form-group">
-          <label for="name">NAME</label>
-          <input
+      <Transition name="fade" mode="out-in">
+        <LoadingSpinner
+            v-if="isSubmitting"
+            :show="true"
+            message="Sending your message..."
+        />
+
+        <form v-else @submit.prevent="onSubmit" class="contact-form">
+          <BaseInput
               id="name"
+              label="NAME"
               v-model="formData.name"
-              type="text"
-              required
               placeholder="Your Name"
+              required
+              :error="touched.name && errors.name ? errors.name : undefined"
+              @blur="setFieldTouched('name'); validate('name')"
           />
-        </div>
 
-        <div class="form-group">
-          <label for="details">CONTACT DETAILS</label>
-          <input
+          <BaseInput
               id="details"
+              label="CONTACT DETAILS"
               v-model="formData.details"
-              type="text"
-              required
               placeholder="Email or Phone"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="message">MESSAGE</label>
-          <textarea
-              id="message"
-              v-model="formData.message"
               required
-              rows="6"
-              placeholder="Tell us about your project"
-          ></textarea>
-        </div>
+              :error="touched.details && errors.details ? errors.details : undefined"
+              @blur="setFieldTouched('details'); validate('details')"
+          />
 
-        <button type="submit" class="submit-btn" :disabled="isSubmitting">
-          {{ isSubmitting ? 'SENDING...' : 'SEND MESSAGE' }}
-        </button>
-      </form>
+          <BaseInput
+              id="message"
+              type="textarea"
+              label="MESSAGE"
+              v-model="formData.message"
+              placeholder="Tell us about your project"
+              :rows="6"
+              required
+              :error="touched.message && errors.message ? errors.message : undefined"
+              @blur="setFieldTouched('message'); validate('message')"
+          />
+
+          <button type="submit" class="submit-btn" :disabled="!isValid">
+            SEND MESSAGE
+          </button>
+        </form>
+      </Transition>
+
+      <Transition name="slide-up">
+        <div v-if="submitSuccess" class="success-message">
+          ✓ Message sent successfully!
+        </div>
+      </Transition>
     </div>
   </footer>
 </template>
@@ -52,52 +65,71 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { saveContact } from '@/api/index.ts'
+import BaseInput from '@/components/common/BaseInput.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import { useForm } from '@/composables/useForm'
 import type Contact from '@/api/models/contact.ts'
 
-const formData = ref<Contact>({
-  name: '',
-  details: '',
-  message: ''
-})
+const submitSuccess = ref(false)
 
-const isSubmitting = ref(false)
-
-const handleSubmit = async () => {
-  isSubmitting.value = true
-  try {
-    await saveContact(formData.value)
-    alert('Message sent successfully!')
-    // Reset form
-    formData.value = {
+const {
+  formData,
+  errors,
+  isSubmitting,
+  isValid,
+  touched,
+  validate,
+  handleSubmit,
+  resetForm,
+  setFieldTouched
+} = useForm<Contact>(
+    {
       name: '',
       details: '',
       message: ''
+    },
+    {
+      name: (value) => value.length >= 2 || 'Name must be at least 2 characters',
+      details: (value) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        const phoneRegex = /^[\d\s+()-]{10,}$/
+        return emailRegex.test(value) || phoneRegex.test(value) || 'Please enter a valid email or phone number'
+      },
+      message: (value) => value.length >= 10 || 'Message must be at least 10 characters'
     }
+)
+
+const onSubmit = handleSubmit(async (data) => {
+  try {
+    await saveContact(data)
+    submitSuccess.value = true
+    resetForm()
+
+    setTimeout(() => {
+      submitSuccess.value = false
+    }, 3000)
   } catch (error) {
     console.error('Failed to send message:', error)
     alert('Failed to send message. Please try again.')
-  } finally {
-    isSubmitting.value = false
   }
-}
+})
 </script>
 
 <style scoped>
 .contact-section {
-
   background: url('@/assets/background.png');
-  background-size: auto;
+  background-size: cover;
   padding: 150px 0 60px;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 40px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -135,30 +167,6 @@ const handleSubmit = async () => {
   max-width: 600px;
 }
 
-.form-group {
-  margin-bottom: 25px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 20px;
-  font-weight: 600;
-  color: #FAFAFA;
-  margin-bottom: 10px;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 18px;
-  font-size: 16px;
-  background: rgba(217, 217, 217, 0.2);
-  border: 1px solid #FFFFFF;
-  border-radius: 8px;
-  color: #FAFAFA;
-  font-family: 'Inter', sans-serif;
-}
-
 .submit-btn {
   width: 100%;
   max-width: 400px;
@@ -179,8 +187,43 @@ const handleSubmit = async () => {
 }
 
 .submit-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
+}
+
+.success-message {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  background: #21A0A0;
+  color: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-size: 18px;
+  font-weight: 600;
+  z-index: 1000;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.slide-up-enter-active {
+  transition: all 0.4s ease;
+}
+.slide-up-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-up-enter-from {
+  transform: translateY(20px);
+  opacity: 0;
+}
+.slide-up-leave-to {
+  opacity: 0;
 }
 
 @media (max-width: 768px) {
@@ -188,9 +231,6 @@ const handleSubmit = async () => {
     font-size: 32px;
   }
   .subtitle {
-    font-size: 18px;
-  }
-  .form-group label {
     font-size: 18px;
   }
   .contact-section {

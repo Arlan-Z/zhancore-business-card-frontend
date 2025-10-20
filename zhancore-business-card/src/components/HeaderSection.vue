@@ -19,7 +19,8 @@ import Logo from "@/assets/logo.svg";
 .header-section {
   position: relative;
   width: 100%;
-  height: 890px;
+  height: 100vh;
+  min-height: 600px;
   background: url('@/assets/background.png');
   background-size: cover;
   background-position: center;

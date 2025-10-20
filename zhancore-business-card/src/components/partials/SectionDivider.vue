@@ -2,7 +2,7 @@
 defineProps<{
   from: string
   to: string
-  difference: number
+  difference: string
   side: string
 }>()
 </script>
