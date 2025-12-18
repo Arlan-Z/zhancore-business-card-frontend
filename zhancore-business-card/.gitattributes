@@ -1,9 +1,0 @@
-# Всегда хранить в репозитории с LF
-* text=auto eol=lf
-
-# Для Windows-скриптов (bat/cmd) оставляем CRLF
-*.bat text eol=crlf
-*.cmd text eol=crlf
-
-# Для shell-скриптов принудительно LF
-*.sh text eol=lf
