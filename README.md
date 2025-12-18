@@ -1,0 +1,6 @@
+![Landing Page – Hero](zhancore-business-card/src/assets/screenshots/Zhancore-1.png)
+![Landing Page – About](zhancore-business-card/src/assets/screenshots/Zhancore-2.png)
+![Landing Page – Advantages](zhancore-business-card/src/assets/screenshots/Zhancore-3.png)
+![Landing Page – Projects](zhancore-business-card/src/assets/screenshots/Zhancore-4.png)
+![Landing Page – Clients](zhancore-business-card/src/assets/screenshots/Zhancore-5.png)
+![Landing Page – Contact](zhancore-business-card/src/assets/screenshots/Zhancore-6.png)
