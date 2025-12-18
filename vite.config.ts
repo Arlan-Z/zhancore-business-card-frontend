@@ -10,12 +10,12 @@ export default defineConfig({
     vue(),
     svgLoader()
   ],
+  base: '/zhancore-business-card-frontend/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
-
   server: {
     proxy: {
       '/api': {
