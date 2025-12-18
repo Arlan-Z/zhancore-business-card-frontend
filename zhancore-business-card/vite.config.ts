@@ -5,10 +5,10 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import svgLoader from 'vite-svg-loader'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    vueDevTools(),
     svgLoader()
   ],
   resolve: {
@@ -16,4 +16,14 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://zhancore-crm-backend-production.up.railway.app',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  }
 })

@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { getProjects } from '@/api/index.ts'
+import { getProjects } from '@/api/index'  
 import BaseCard from '@/components/common/BaseCard.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import { useApi } from '@/composables/useApi'
 import { useImageError } from '@/composables/useImageError'
-import type Project from '@/api/models/project.ts'
+
+import type Project from '@/api/models/project'
+
+
+import { onMounted, TransitionGroup } from 'vue'
 
 const { data: projects, loading, error, execute: fetchData } = useApi<Project[]>(getProjects)
 const { handleImageError } = useImageError('https://via.placeholder.com/670x331')
 
 onMounted(() => {
   fetchData()
-  console.log(projects)
 })
 </script>
 
@@ -31,22 +33,22 @@ onMounted(() => {
       </div>
 
       <TransitionGroup
-          v-else-if="!loading && projects && projects.length > 0"
-          name="project-list"
-          tag="div"
-          class="projects-grid"
+        v-else-if="!loading && projects && projects.length > 0"
+        name="project-list"
+        tag="div"
+        class="projects-grid"
       >
         <BaseCard
-            v-for="project in projects"
-            :key="project.name"
-            variant="project"
-            :title="project.name"
-            :show-divider="true"
+          v-for="project in projects"
+          :key="project.name"
+          variant="project"
+          :title="project.name"
+          :show-divider="true"
         >
           <template #image>
             <img :src="project.imageUrl" :alt="project.name" @error="handleImageError" />
           </template>
-          <p>{{ project.description }}</p>
+          <p>{{ project.review }}</p> 
         </BaseCard>
       </TransitionGroup>
     </div>

@@ -1,24 +1,24 @@
-import axios from "axios";
-import type Contact from "./models/contact";
-import type Client from "./models/client";
-import type Project from "./models/project";
+import type Project from './models/project'
 
-const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
-    timeout: 5000
-});
-
-export const getClients = async (): Promise<Client[]> => {
-  const response = await api.get<Client[]>("api/clients");
-  return response.data;
+export const getProjects = async () => {
+  const response = await fetch('/api/project-reviews');
+  console.log(response)
+  if (!response.ok) throw new Error('Failed to fetch projects');
+  return response.json();
 };
 
-export const getProjects = async (): Promise<Project[]> => {
-  const res = await api.get<Project[]>("api/projects");
-  return res.data;
+export const getClients = async () => {
+  const response = await fetch('/api/client-reviews');
+  if (!response.ok) throw new Error('Failed to fetch clients');
+  return response.json();
 };
 
-export const saveContact = async (contact: Contact): Promise<Contact> => {
-  const res = await api.post<Contact>("api/contactDetails", contact);
-  return res.data;
+export const saveContact = async (contact: { name: string; details: string; message: string }) => {
+  const response = await fetch ('/api/client/landing-request', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(contact)
+  });
+  if (!response.ok) throw new Error('Failed to save contact');
+  return response.json();
 };
