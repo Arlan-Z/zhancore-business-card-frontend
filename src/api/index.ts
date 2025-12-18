@@ -15,6 +15,6 @@ export const saveContact = async (contact: {
   details: string;
   message: string;
 }) => {
-  const { data } = await api.post('/api/client/landing-request', contact);
+  const { data } = await api.post('/client/landing-request', contact);
   return data;
 };
